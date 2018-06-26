@@ -41,7 +41,9 @@
  * - page.navigation_collapsible: Items for the navigation (collapsible) region.
  * - page.highlighted: Items for the highlighted content region.
  * - page.help: Dynamic help text, mostly for admin pages.
+ * - page.content_top: The main content of the current page full width above sidebars.
  * - page.content: The main content of the current page.
+ * - page.content_bottom: The main content of the current page full width below sidebars.
  * - page.sidebar_left: Items for the left sidebar.
  * - page.sidebar_right: Items for the right sidebar.
  * - page.footer: Items for the footer region.
@@ -52,24 +54,31 @@
  * @see html.html.twig
  */
 #}
+
 {% set container = theme.settings.fluid_container ? 'container-fluid' : 'container' %}
-{# Navbar #}
-{% if page.navigation or page.navigation_collapsible %}
-  {% block navbar %}
-    {%
-      set navbar_classes = [
-        'navbar',
-        theme.settings.navbar_inverse ? 'navbar-inverse' : 'navbar-default',
-        theme.settings.navbar_position ? 'navbar-' ~ theme.settings.navbar_position|clean_class : container,
-      ]
-    %}
-    <header{{ navbar_attributes.addClass(navbar_classes) }} id="navbar" role="banner">
-      {% if not navbar_attributes.hasClass(container) %}
-        <div class="{{ container }}">
-      {% endif %}
-      <div class="navbar-header">
+
+{% if page.top_bar or page.navigation or page.navigation_collapsible %}
+<header class="header {{ container }}">
+
+  {# Top Bar #}
+  {% if page.top_bar %}
+    {% block top_bar %}
+      <div class="top-bar container-fluid">
+        {{ page.top_bar }}
+      </div>
+    {% endblock %}
+  {% endif %}
+
+
+
+  {# Navbar #}
+  {% if page.navigation or page.navigation_collapsible %}
+    {% block navbar %}
+      <nav class="navbar navbar-default container" id="navbar" role="banner">
+
+        <div class="navbar-header">
         {{ page.navigation }}
-        {# .btn-navbar is used as the toggle for collapsed navbar content #}
+
         {% if page.navigation_collapsible %}
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
             <span class="sr-only">{{ 'Toggle navigation'|t }}</span>
@@ -78,31 +87,33 @@
             <span class="icon-bar"></span>
           </button>
         {% endif %}
-      </div>
+        </div>
 
-      {# Navigation (collapsible) #}
-      {% if page.navigation_collapsible %}
-        <div id="navbar-collapse" class="navbar-collapse collapse">
-          {{ page.navigation_collapsible }}
-        </div>
-      {% endif %}
-      {% if not navbar_attributes.hasClass(container) %}
-        </div>
-      {% endif %}
-    </header>
-  {% endblock %}
+        {# Navigation (collapsible) #}
+        {% if page.navigation_collapsible %}
+          <div id="navbar-collapse" class="navbar-collapse collapse">
+            {{ page.navigation_collapsible }}
+          </div>
+        {% endif %}
+
+      </nav>
+    {% endblock %}
+  {% endif %}
+</header>
 {% endif %}
+
+
 
 {# Main #}
 {% block main %}
   <div role="main" class="main-container {{ container }} js-quickedit-main-content">
     <div class="row">
 
-      {# Top bar #}
-      {% if page.top_bar %}
-        {% block top_bar %}
+      {# Content top #}
+      {% if page.content_top %}
+        {% block content_top %}
           <div class="col-sm-12" role="heading">
-            {{ page.top_bar }}
+            {{ page.content_top }}
           </div>
         {% endblock %}
       {% endif %}
@@ -143,11 +154,11 @@
         {% endblock %}
       {% endif %}
 	  
-	  {# Bottom bar #}
-      {% if page.bottom_bar %}
-        {% block bottom_bar %}
+	  {# Content bottom #}
+      {% if page.content_bottom %}
+        {% block content_bottom %}
           <div class="col-sm-12" role="heading">
-            {{ page.bottom_bar }}
+            {{ page.content_bottom }}
           </div>
         {% endblock %}
       {% endif %}
@@ -158,7 +169,7 @@
 
 {% if page.footer %}
   {% block footer %}
-    <footer class="footer {{ container }}" role="contentinfo">
+    <footer class="footer {{ container }}">
       {{ page.footer }}
     </footer>
   {% endblock %}

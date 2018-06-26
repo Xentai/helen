@@ -7,13 +7,14 @@ description: 'Uses the Bootstrap framework LESS source files and must be compile
 package: 'Bootstrap'
 
 regions:
+  top_bar: 'Top Bar'
   navigation: 'Navigation'
   navigation_collapsible: 'Navigation (Collapsible)'
-  top_bar: 'Top Bar'
+  content_top: 'Content Top'
   content: 'Content'
   sidebar_left: 'Left side'
   sidebar_right: 'Right side'
-  bottom_bar: 'Bottom Bar'
+  content_bottom: 'Content Bottom'
   footer: 'Footer'
   page_top: 'Page top'
   page_bottom: 'Page bottom'
