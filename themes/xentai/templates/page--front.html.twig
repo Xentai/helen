@@ -35,7 +35,8 @@
  *   comment/reply/12345).
  *
  * Regions:
- * - page.top_bar: Items for the top bar region.
+ * - page.top_bar_left: Items for the left top bar region.
+ * - page.top_bar_right: Items for the right top bar region.
  * - page.bottom_bar: Items for the bottom bar region.
  * - page.navigation: Items for the navigation region.
  * - page.navigation_collapsible: Items for the navigation (collapsible) region.
@@ -57,19 +58,39 @@
 
 {% set container = theme.settings.fluid_container ? 'container-fluid' : 'container' %}
 
-{% if page.top_bar or page.navigation or page.navigation_collapsible %}
-<header class="header {{ container }}">
+{% if page.top_bar_left or page.top_bar_right or page.navigation or page.navigation_collapsible %}
+<header class="header container-fluid">
 
   {# Top Bar #}
-  {% if page.top_bar %}
-    {% block top_bar %}
-      <div class="top-bar container-fluid">
-        {{ page.top_bar }}
-      </div>
-    {% endblock %}
+  {% if page.top_bar_left or page.top_bar_right %}
+  <div class="top-bar container">
+      {% block top_bar_left %}
+	    <div class="col-lg-7 top-bar-left">
+		
+		<nav class="navbar navbar-default" id="top-navbar" role="banner">
+
+        <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+            <span class="sr-only">{{ 'Toggle navigation'|t }}</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+		  <div id="navbar-collapse" class="navbar-collapse collapse">
+          {{ page.top_bar_left }}
+		  </div>
+		</div>
+		
+		</div>
+      {% endblock %}
+	  
+	  {% block top_bar_right %}
+	    <div class="col-lg-5 top-bar-right">
+		  {{ page.top_bar_right }}
+		</div>
+      {% endblock %}
+  </div>
   {% endif %}
-
-
 
   {# Navbar #}
   {% if page.navigation or page.navigation_collapsible %}
